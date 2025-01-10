@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produkt Designer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Produkt Designer</h1>
+    </header>
+    <main>
+        <div class="toolbox">
+            <button id="addText">Text hinzufügen</button>
+            <input type="file" id="uploadImage" />
+            <div class="text-tools">
+                <label for="textColor">Farbe:</label>
+                <input type="color" id="textColor" value="#000000" />
+
+                <label for="fontFamily">Schriftart:</label>
+                <select id="fontFamily">
+                    <option value="Arial">Arial</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Courier New">Courier New</option>
+                </select>
+
+                <button id="bold">Fett</button>
+                <button id="italic">Kursiv</button>
+                <button id="underline">Unterstrichen</button>
+
+                <label for="editText">Text ändern:</label>
+                <input type="text" id="editText" placeholder="Text hier eingeben" />
+                <button id="deleteText">Löschen</button>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <canvas id="productCanvas" width="500" height="500"></canvas>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
