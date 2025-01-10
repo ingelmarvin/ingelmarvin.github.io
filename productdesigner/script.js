@@ -1,38 +1,94 @@
 // Initialisiere Fabric.js Canvas
 const canvas = new fabric.Canvas('productCanvas');
+let selectedText = null;
 
-// Funktion: Bild hochladen
-document.getElementById('uploadImage').addEventListener('change', function (e) {
-    const reader = new FileReader();
-    reader.onload = function (event) {
-        const imgObj = new Image();
-        imgObj.src = event.target.result;
-        imgObj.onload = function () {
-            const img = new fabric.Image(imgObj);
-            img.scaleToWidth(200); // Passe die Größe an
-            canvas.add(img);
+//löschlogik
+const deleteIcon =
+    "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";
+
+var deleteImg = document.createElement('img');
+deleteImg.src = deleteIcon;
+
+fabric.Object.prototype.transparentCorners = false;
+fabric.Object.prototype.cornerColor = 'blue';
+fabric.Object.prototype.cornerStyle = 'circle';
+
+function addObjectToCanvas(addedObject) {
+
+    addedObject.controls.deleteControl = new fabric.Control({
+        x: 0.5,
+        y: -0.5,
+        offsetX: 16,
+        offsetY: -16,
+        cursorStyle: 'pointer',
+        mouseUpHandler: onDeleteObjectFromIconPressed,
+        render: renderDeleteIcon(deleteImg),
+        cornerSize: 24,
+    });
+
+    canvas.add(addedObject);
+    canvas.setActiveObject(addedObject);
+}
+
+function onDeleteObjectFromIconPressed(_eventData, transform) {
+    canvas.remove(transform.target);
+    canvas.requestRenderAll();
+}
+
+function renderDeleteIcon(icon) {
+
+    return function (ctx, left, top, _styleOverride, fabricObject) {
+        const size = this.cornerSize;
+        ctx.save();
+        ctx.translate(left, top);
+        ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle));
+        ctx.drawImage(icon, -size / 2, -size / 2, size, size);
+        ctx.restore();
+    }
+}
+
+//Ereignis: Neuer Bildbutton geklickt
+document.getElementById('addImg')?.addEventListener('click', () => {
+    const uploadImageButton = document.createElement("input");
+    uploadImageButton.type = "file";
+
+    uploadImageButton.addEventListener('change', function (e) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const imgObj = new Image();
+            imgObj.src = event.target.result;
+            imgObj.onload = function () {
+                const img = new fabric.Image(imgObj);
+                img.scaleToWidth(200); // Passe die Größe an
+                addObjectToCanvas(img);
+            };
         };
-    };
-    reader.readAsDataURL(e.target.files[0]);
-});
+        reader.readAsDataURL(e.target.files[0]);
+    });
 
-let selectedText = null; // Speichert das aktuell ausgewählte Textobjekt
+    document.body.appendChild(uploadImageButton);
+    uploadImageButton.click();
+    document.body.removeChild(uploadImageButton);
+
+})
 
 // Ereignis: Text hinzufügen
-document.getElementById('addText').addEventListener('click', function () {
+document.getElementById('addText')?.addEventListener('click', function () {
     const text = new fabric.Text('Dein Text', {
         left: 100,
         top: 100,
         fill: 'black',
         fontSize: 20,
         fontFamily: 'Arial',
+        objectCaching: false,
     });
-    canvas.add(text);
-    canvas.setActiveObject(text); // Automatische Auswahl des neuen Textes
+    addObjectToCanvas(text)
+    //canvas.add(text);
+    //    canvas.setActiveObject(text); // Automatische Auswahl des neuen Textes
 });
 
 // Ereignis: Textfarbe ändern
-document.getElementById('textColor').addEventListener('input', function (e) {
+document.getElementById('textColor')?.addEventListener('input', function (e) {
     const activeObject = canvas.getActiveObject();
     if (activeObject && activeObject.type === 'text') {
         activeObject.set('fill', e.target.value);
@@ -41,7 +97,7 @@ document.getElementById('textColor').addEventListener('input', function (e) {
 });
 
 // Ereignis: Schriftart ändern
-document.getElementById('fontFamily').addEventListener('change', function (e) {
+document.getElementById('fontFamily')?.addEventListener('change', function (e) {
     const activeObject = canvas.getActiveObject();
     if (activeObject && activeObject.type === 'text') {
         activeObject.set('fontFamily', e.target.value);
@@ -68,7 +124,7 @@ canvas.on('selection:cleared', function () {
 });
 
 // Textstil: Fett
-document.getElementById('bold').addEventListener('click', function () {
+document.getElementById('bold')?.addEventListener('click', function () {
     const activeObject = canvas.getActiveObject();
     if (activeObject && activeObject.type === 'text') {
         activeObject.set('fontWeight', activeObject.fontWeight === 'bold' ? 'normal' : 'bold');
@@ -77,7 +133,7 @@ document.getElementById('bold').addEventListener('click', function () {
 });
 
 // Textstil: Kursiv
-document.getElementById('italic').addEventListener('click', function () {
+document.getElementById('italic')?.addEventListener('click', function () {
     const activeObject = canvas.getActiveObject();
     if (activeObject && activeObject.type === 'text') {
         activeObject.set('fontStyle', activeObject.fontStyle === 'italic' ? 'normal' : 'italic');
@@ -86,7 +142,7 @@ document.getElementById('italic').addEventListener('click', function () {
 });
 
 // Textstil: Unterstrichen
-document.getElementById('underline').addEventListener('click', function () {
+document.getElementById('underline')?.addEventListener('click', function () {
     const activeObject = canvas.getActiveObject();
     if (activeObject && activeObject.type === 'text') {
         activeObject.set('underline', !activeObject.underline);
@@ -95,7 +151,7 @@ document.getElementById('underline').addEventListener('click', function () {
 });
 
 // Text löschen
-document.getElementById('deleteText').addEventListener('click', function () {
+document.getElementById('deleteText')?.addEventListener('click', function () {
     const activeObject = canvas.getActiveObject();
     if (activeObject && activeObject.type === 'text') {
         canvas.remove(activeObject);
@@ -104,7 +160,7 @@ document.getElementById('deleteText').addEventListener('click', function () {
 });
 
 // Ereignis: Textinhalt bearbeiten
-document.getElementById('editText').addEventListener('input', function (e) {
+document.getElementById('editText')?.addEventListener('input', function (e) {
     const activeObject = canvas.getActiveObject();
     if (activeObject && activeObject.type === 'text') {
         activeObject.set('text', e.target.value); // Aktualisiere den Text
@@ -122,7 +178,7 @@ canvas.on('selection:created', function (e) {
 
 // Zurücksetzen des Eingabefelds, wenn die Auswahl gelöscht wird
 canvas.on('selection:cleared', function () {
-    document.getElementById('editText').value = '';
+    //document.getElementById('editText').value = '';
 });
 
 // Ereignis: Doppelklick für Textbearbeitung
@@ -201,4 +257,15 @@ function editTextObject(activeObject) {
             input.blur(); // Verliert den Fokus
         }
     });
+}
+
+function downloadCanvasImage() {
+    const imageSrc = canvas.toDataURL();
+    // some download code down here
+    const a = document.createElement('a');
+    a.href = imageSrc;
+    a.download = 'image.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }

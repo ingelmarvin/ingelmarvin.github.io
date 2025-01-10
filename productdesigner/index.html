@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Produkt Designer</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fabric@latest/dist/index.min.js"></script>
 </head>
 
 <body>
@@ -14,8 +14,11 @@
         <h1>Produkt Designer</h1>
     </header>
     <main>
-        <div class="toolbox">
-            <button id="addText">Text hinzufügen</button>
+        <div class="canvas-container">
+            <canvas id="productCanvas"></canvas>
+        </div>
+
+        <!--div class="toolbox">
             <input type="file" id="uploadImage" />
             <div class="text-tools">
                 <label for="textColor">Farbe:</label>
@@ -38,12 +41,15 @@
                 <input type="text" id="editText" placeholder="Text hier eingeben" />
                 <button id="deleteText">Löschen</button>
             </div>
-        </div>
+        </div-->
 
-        <div class="canvas-container">
-            <canvas id="productCanvas" width="500" height="500"></canvas>
-        </div>
+
     </main>
+
+    <footer>
+        <button id="addText">Text hinzufügen</button>
+        <button id="addImg">Bild hinzufügen</button>
+    </footer>
     <script src="script.js"></script>
 </body>
 

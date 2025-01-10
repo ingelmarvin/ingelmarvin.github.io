@@ -1,3 +1,20 @@
+/* Responsive Anpassung für größere Bildschirme (Desktops) */
+@media screen and (min-width: 768px) {
+    main {
+        flex-direction: column;
+        /* Standardmäßig bleibt es in einer Spalte */
+    }
+
+    button,
+    input[type="color"],
+    input[type="text"],
+    select {
+        min-width: 150px;
+        /* Etwas breitere Eingabefelder auf größeren Geräten */
+    }
+}
+
+/* Grundlegendes Layout für den Body */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -5,38 +22,99 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 100vh;
+
+    /* Maximale Höhe für den Body */
 }
 
+/* Header bleibt oben */
 header {
     background-color: #333;
     color: white;
-    padding: 10px 0;
     width: 100%;
     text-align: center;
+    padding: 10px 0;
 }
 
+footer {
+    background-color: #333;
+    color: white;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    /* Standardmäßig relativ positioniert */
+}
+
+/* Main-Bereich für das Canvas und die Werkzeuge */
 main {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+    /* Standardmäßig oben ausrichten */
+    width: 100%;
+}
+
+/* Canvas-container Styling */
+.canvas-container {
+    width: 100%;
+    max-width: 100%;
+    /* Maximale Breite auf 100% setzen */
     margin-top: 20px;
-}
-
-.toolbox {
+    position: relative;
+    height: auto;
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    justify-content: center;
 }
 
-canvas {
+#productCanvas {
+    width: 100% !important;
+    /* Canvas soll 100% der Container-Breite einnehmen */
+    height: auto !important;
+    /* Die Höhe bleibt proportional zur Breite */
     border: 1px solid #ccc;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Toolbox Styling (jetzt unter dem Canvas) */
+.toolbox {
+    display: flex;
+    flex-wrap: wrap;
+    /* Wenn zu viel Platz benötigt wird, wird die Toolbox umgebrochen */
+    gap: 10px;
+    justify-content: center;
+    /* Alles zentrieren */
+    width: 100%;
+    margin-top: 20px;
+    /* Abstand vom Canvas */
+}
+
+/* Schaltflächen und Eingabefelder kleiner machen auf mobilen Geräten */
+button,
+input[type="color"],
+input[type="text"],
+select {
+    font-size: 16px;
+    padding: 8px;
+    margin: 5px 0;
+    width: auto;
+    /* Elemente passen sich der Breite des Inhalts an */
+    min-width: 120px;
+    /* Mindestbreite für Elemente */
+    box-sizing: border-box;
+    /* Padding und Border in die Breitenberechnung einbeziehen */
+}
+
+/* Text-Werkzeuge */
 .text-tools {
     display: flex;
-    align-items: center;
     gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    width: auto;
 }
 
 .text-tools label {
@@ -49,8 +127,19 @@ canvas {
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     cursor: pointer;
+    min-width: 100px;
+    /* Mindestbreite der Buttons */
 }
 
 .text-tools button:hover {
     background-color: #ddd;
+}
+
+/* Mobile optimierte Schaltflächen */
+button {
+    font-size: 18px;
+    padding: 12px;
+    width: auto;
+    min-width: 120px;
+    /* Mindestbreite für mobile Schaltflächen */
 }
